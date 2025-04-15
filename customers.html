@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customers - Garage Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <div class="p-4 bg-blue-600 text-white">
+    <h1 class="text-2xl font-bold">Customers</h1>
+  </div>
+
+  <!-- New Customer Form -->
+  <div class="p-4">
+    <h2 class="text-xl font-semibold mb-4">Add New Customer</h2>
+    <form id="add-customer-form" class="space-y-4">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+        <input type="text" id="name" class="w-full px-4 py-2 border rounded-md" required />
+      </div>
+      <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+        <input type="text" id="phone" class="w-full px-4 py-2 border rounded-md" required />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="email" class="w-full px-4 py-2 border rounded-md" />
+      </div>
+      <div>
+        <label for="vehicle" class="block text-sm font-medium text-gray-700">Vehicle Registration Number</label>
+        <input type="text" id="vehicle" class="w-full px-4 py-2 border rounded-md" required />
+      </div>
+      <div>
+        <label for="model" class="block text-sm font-medium text-gray-700">Vehicle Make and Model</label>
+        <input type="text" id="model" class="w-full px-4 py-2 border rounded-md" />
+      </div>
+      <div>
+        <label for="odo" class="block text-sm font-medium text-gray-700">Odometer Reading</label>
+        <input type="number" id="odo" class="w-full px-4 py-2 border rounded-md" />
+      </div>
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md">Add Customer</button>
+    </form>
+  </div>
+
+  <!-- Customer List Section -->
+  <div class="p-4 mt-6">
+    <h2 class="text-xl font-semibold mb-4">Existing Customers</h2>
+    <div class="mb-4">
+      <input type="text" id="search" class="w-full px-4 py-2 border rounded-md" placeholder="Search by name or vehicle..." />
+    </div>
+    <ul id="customer-list" class="space-y-4">
+      <!-- Customer list will be populated here -->
+    </ul>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-white shadow-md">
+  <div class="flex justify-around items-center py-3">
+    <!-- Dashboard Tab -->
+    <a href="app.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2 2 4-4 5 5 6-6"></path>
+      </svg>
+      <span class="text-sm">Dashboard</span>
+    </a>
+
+    <!-- Customers Tab -->
+    <a href="customers.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11v2a4 4 0 11-8 0v-2a4 4 0 118 0zM12 15a5 5 0 00-5-5H7a7 7 0 017-7h1a7 7 0 017 7h-1a5 5 0 00-5 5z"></path>
+      </svg>
+      <span class="text-sm">Customers</span>
+    </a>
+
+    <!-- Jobs Tab -->
+    <a href="jobs.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+      </svg>
+      <span class="text-sm">Jobs</span>
+    </a>
+
+    <!-- Inventory Tab -->
+    <a href="inventory.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1 1 3-3 4 4 4-4 3 3 1-1-4-4 4-4-1-1-3 3-4-4-4 4-3-3-1 1 4 4z"></path>
+      </svg>
+      <span class="text-sm">Inventory</span>
+    </a>
+
+    <!-- Reports Tab -->
+    <a href="reports.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1 1 3-3 4 4 4-4 3 3 1-1-4-4 4-4-1-1-3 3-4-4-4 4-3-3-1 1 4 4z"></path>
+      </svg>
+      <span class="text-sm">Reports</span>
+    </a>
+
+    <!-- Employee Management Tab -->
+    <a href="employees.html" class="flex flex-col items-center text-gray-600 hover:text-blue-600">
+      <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12l1 1 3-3 4 4 4-4 3 3 1-1-4-4 4-4-1-1-3 3-4-4-4 4-3-3-1 1 4 4z"></path>
+      </svg>
+      <span class="text-sm">Employees</span>
+    </a>
+  </div>
+</div>
+
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAjIbAzodMcoG4tOxrLxijcgqqo2F29wr4",
+  authDomain: "garage-gms.firebaseapp.com",
+  projectId: "garage-gms",
+  storageBucket: "garage-gms.firebasestorage.app",
+  messagingSenderId: "1038703598189",
+  appId: "1:1038703598189:web:38c816a7b0f66a13a43d64"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Add New Customer
+    const addCustomerForm = document.getElementById('add-customer-form');
+    addCustomerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const vehicle = document.getElementById('vehicle').value;
+      const model = document.getElementById('model').value;
+      const odo = document.getElementById('odo').value;
+
+      await db.collection('customers').add({
+        name,
+        phone,
+        email,
+        vehicle,
+        model,
+        odo
+      });
+
+      addCustomerForm.reset();
+      loadCustomers(); // Reload the list after adding
+    });
+
+    // Load Customers from Firestore
+    async function loadCustomers() {
+      const customerList = document.getElementById('customer-list');
+      customerList.innerHTML = '';
+
+      const snapshot = await db.collection('customers').get();
+      snapshot.forEach(doc => {
+        const customer = doc.data();
+        const li = document.createElement('li');
+        li.classList.add('p-4', 'bg-white', 'rounded-lg', 'shadow-md');
+        li.innerHTML = `
+          <h3 class="font-semibold">${customer.name}</h3>
+          <p class="text-sm text-gray-600">Phone: ${customer.phone}</p>
+          <p class="text-sm text-gray-600">Vehicle: ${customer.vehicle}</p>
+          <p class="text-sm text-gray-600">Odo: ${customer.odo}</p>
+        `;
+        customerList.appendChild(li);
+      });
+    }
+
+    // Search Customers
+    document.getElementById('search').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const customerListItems = document.querySelectorAll('#customer-list li');
+
+      customerListItems.forEach((item) => {
+        const name = item.querySelector('h3').textContent.toLowerCase();
+        const vehicle = item.querySelector('p').textContent.toLowerCase();
+        if (name.includes(query) || vehicle.includes(query)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // Load customers on page load
+    window.onload = loadCustomers;
+  </script>
+</body>
+</html>
